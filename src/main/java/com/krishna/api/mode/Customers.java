@@ -3,7 +3,7 @@ package com.krishna.api.mode;
 import lombok.Data;
 
 @Data
-public class customers {
+public class Customers {
 
     private Integer customerNumber;
     private String customerName;
