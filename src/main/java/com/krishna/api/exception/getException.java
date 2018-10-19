@@ -1,23 +1,23 @@
 package com.krishna.api.exception;
 
-public class getException extends Exception{
+import com.krishna.api.constants.SystemConstants;
+import com.krishna.api.dao.getSystemDetailsDAO;
+import com.krishna.api.modle.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
 
-    private String errorCode;
+@Configuration
+public class getException {
 
-    public getException(String message) {
-        super(message);
+    private static final Logger LOGGER = LoggerFactory.getLogger(getSystemDetailsDAO.class);
+
+    public ApiResponse createException(Exception e){
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResponseCode(SystemConstants.DB_ERROR_CODE);
+        apiResponse.setDescription(e.toString());
+        LOGGER.warn("Error occurred: " + e.getMessage());
+        return apiResponse;
     }
 
-    public getException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public getException(String message, Throwable cause, String errorCode) {
-        super(message, cause);
-        this.errorCode = errorCode;
-    }
-
-    public String getException() {
-        return errorCode;
-    }
 }

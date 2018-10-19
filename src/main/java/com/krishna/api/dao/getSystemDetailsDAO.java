@@ -5,6 +5,8 @@ import com.krishna.api.dao.rowMapper.CustomerMapper;
 import com.krishna.api.exception.getException;
 import com.krishna.api.modle.ApiResponse;
 import com.krishna.api.modle.Customers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,10 +21,15 @@ public class getSystemDetailsDAO implements IGetSystemDetailsDAO{
     @Qualifier("krishnaJdbcTemplate")
     JdbcTemplate jdbcTemplate;
 
-    public static final String GET_ALL_CUSTOMERS = "SELECT * from customer";
+    @Autowired
+    getException getException;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(getSystemDetailsDAO.class);
+
+    public static final String GET_ALL_CUSTOMERS = "SELECT * rom customer";
 
     @Override
-    public ApiResponse getCustomerDetailsDao() throws getException {
+    public ApiResponse getCustomerDetailsDao(){
         ApiResponse apiResp = new ApiResponse();
         List<Customers> customers;
         try{
@@ -30,8 +37,10 @@ public class getSystemDetailsDAO implements IGetSystemDetailsDAO{
             apiResp.setResponseCode(SystemConstants.RES_CODE);
             apiResp.setRespObj(customers);
         }catch (Exception e){
-            apiResp.setResponseCode(SystemConstants.DB_ERROR_CODE);
+            apiResp = getException.createException(e);
+            /*apiResp.setResponseCode(SystemConstants.DB_ERROR_CODE);
             apiResp.setDescription(e.toString());
+            LOGGER.warn("error occured: " + e.getMessage());*/
         }
         return apiResp;
     }

@@ -13,7 +13,7 @@ public class getSystemDetails implements IGetSystemDetails{
     IGetSystemDetailsDAO getSystemDetailsDAO;
 
     @Override
-    public ApiResponse getCustomerDetails () throws getException {
+    public ApiResponse getCustomerDetails (){
         return getSystemDetailsDAO.getCustomerDetailsDao();
     }
 }

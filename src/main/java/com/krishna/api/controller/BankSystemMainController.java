@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
+
 @RestController
 @RequestMapping(path = "/orderSystem")
 public class BankSystemMainController {
@@ -24,17 +25,16 @@ public class BankSystemMainController {
     @Autowired
     AccountsRepository accountsRepository;
 
+    @Autowired
+    getException getException;
+
     @GetMapping(path = "/getAllCustomers")
     public @ResponseBody ApiResponse getAllCustomers(HttpServletResponse response){
-        LOGGER.debug("Request received at: " + System.currentTimeMillis());
+        long callStarted =  System.currentTimeMillis();
         ApiResponse apiResponse = new ApiResponse();
-        try{
-            apiResponse = getSystemDetails.getCustomerDetails();
-        }catch(getException e){
-            handleException(apiResponse,e);
-        } finally {
-            LOGGER.debug("Request completed at: " + System.currentTimeMillis());
-        }
+
+        apiResponse = getSystemDetails.getCustomerDetails();
+        LOGGER.info("Total time to complete getAllCustomers call: " + (System.currentTimeMillis()-callStarted) + " ms.");
 
         response.addDateHeader("globalTimestamp", System.currentTimeMillis());
         response.addHeader("UserId","Krishna-Thapa");
@@ -52,7 +52,7 @@ public class BankSystemMainController {
         try {
             apiResponse.setRespObj(accountsRepository.findAll());
         }catch (Exception e){
-            System.out.println("----krishna----"+e.getMessage());
+            LOGGER.warn(e.getMessage());
         }
         return apiResponse;
     }
@@ -62,8 +62,11 @@ public class BankSystemMainController {
         ApiResponse apiResponse = new ApiResponse();
         try{
             apiResponse.setRespObj(accountsRepository.findByCustomerId(customerId));
+            apiResponse.setResponseCode(200);
         }catch (Exception e){
-            System.out.println(e);
+            getException.createException(e);
+            //LOGGER.warn(e.getMessage());
+            //handleException(apiResponse,e);
         }
         return apiResponse;
     }
@@ -75,7 +78,7 @@ public class BankSystemMainController {
      *
      */
     private void handleException(ApiResponse apiResponse, Exception e) {
-        LOGGER.debug("exception occurred" + e);
+        LOGGER.warn("exception occurred" + e);
         apiResponse.setResponseCode(SystemConstants.DB_ERROR_CODE);
         apiResponse.setDescription(e.getMessage());
     }

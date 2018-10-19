@@ -5,5 +5,5 @@ import com.krishna.api.modle.ApiResponse;
 
 public interface IGetSystemDetails {
 
-    public ApiResponse getCustomerDetails () throws getException;
+    public ApiResponse getCustomerDetails ();
 }
