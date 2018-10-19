@@ -1,6 +1,6 @@
 package com.krishna.api.dao.rowMapper;
 
-import com.krishna.api.mode.Customers;
+import com.krishna.api.modle.Customers;
 import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;

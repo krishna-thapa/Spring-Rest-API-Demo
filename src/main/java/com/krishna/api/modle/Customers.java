@@ -1,4 +1,4 @@
-package com.krishna.api.mode;
+package com.krishna.api.modle;
 
 import lombok.Data;
 

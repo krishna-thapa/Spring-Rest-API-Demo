@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright 2018 Jaguar Land Rover Ltd. all rights reserved.
  ******************************************************************************/
-package com.krishna.api.mode;
+package com.krishna.api.modle;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

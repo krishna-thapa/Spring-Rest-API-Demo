@@ -2,7 +2,7 @@ package com.krishna.api.controller;
 
 import com.krishna.api.constants.SystemConstants;
 import com.krishna.api.exception.getException;
-import com.krishna.api.mode.ApiResponse;
+import com.krishna.api.modle.ApiResponse;
 import com.krishna.api.repository.AccountsRepository;
 import com.krishna.api.service.IGetSystemDetails;
 import org.slf4j.Logger;
@@ -41,6 +41,10 @@ public class BankSystemMainController {
         return apiResponse;
     }
 
+    /**
+     * Get method using Hibernate and JPA to get all the fields of Account table
+     * @return Api Response
+     */
     @GetMapping(path = "/allAccounts")
     public @ResponseBody ApiResponse getAllAccounts(){
         // This returns a JSON or XML of all the accounts that are in DB
@@ -53,10 +57,21 @@ public class BankSystemMainController {
         return apiResponse;
     }
 
+    @GetMapping(path = "/account/{customerId}")
+    public @ResponseBody ApiResponse getCustomerAccount(@PathVariable("customerId") Integer customerId){
+        ApiResponse apiResponse = new ApiResponse();
+        try{
+            apiResponse.setRespObj(accountsRepository.findByCustomerId(customerId));
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return apiResponse;
+    }
+
     /**
      * This method is common method, used to handle Exception
-     * @param ApiResponse
-     * @param getException
+     * @param
+     * @param
      *
      */
     private void handleException(ApiResponse apiResponse, Exception e) {
