@@ -19,7 +19,7 @@ public class getSystemDetailsDAO implements IGetSystemDetailsDAO{
     @Qualifier("krishnaJdbcTemplate")
     JdbcTemplate jdbcTemplate;
 
-    public static final String GET_ALL_CUSTOMERS = "SELECT * from customers";
+    public static final String GET_ALL_CUSTOMERS = "SELECT * from customer";
 
     @Override
     public ApiResponse getCustomerDetailsDao() throws getException {

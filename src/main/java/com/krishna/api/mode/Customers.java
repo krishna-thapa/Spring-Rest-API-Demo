@@ -5,19 +5,12 @@ import lombok.Data;
 @Data
 public class Customers {
 
-    private Integer customerNumber;
-    private String customerName;
-    private String contactLastName;
-    private String contactFirstName;
-    private String phone;
-    private String addressLine1;
-    private String addressLine2;
-    private String city;
-    private String state;
-    private String postalCode;
-    private String country;
-    private Integer salesRepEmployeeNumber;
-    private Double creditLimit;
-
+    private Integer customerId;
+    private String customerAddress;
+    private String customerCity;
+    private String customerTypeCode;
+    private String customerFedCode;
+    private String customerPostalCode;
+    private String customerState;
 
 }
