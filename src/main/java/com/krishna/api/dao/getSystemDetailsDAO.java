@@ -2,7 +2,6 @@ package com.krishna.api.dao;
 
 import com.krishna.api.constants.SystemConstants;
 import com.krishna.api.dao.rowMapper.CustomerMapper;
-import com.krishna.api.exception.getException;
 import com.krishna.api.modle.ApiResponse;
 import com.krishna.api.modle.Customers;
 import org.slf4j.Logger;
@@ -21,12 +20,9 @@ public class getSystemDetailsDAO implements IGetSystemDetailsDAO{
     @Qualifier("krishnaJdbcTemplate")
     JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    getException getException;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(getSystemDetailsDAO.class);
 
-    public static final String GET_ALL_CUSTOMERS = "SELECT * rom customer";
+    public static final String GET_ALL_CUSTOMERS = "SELECT * from customer";
 
     @Override
     public ApiResponse getCustomerDetailsDao(){
@@ -37,10 +33,8 @@ public class getSystemDetailsDAO implements IGetSystemDetailsDAO{
             apiResp.setResponseCode(SystemConstants.RES_CODE);
             apiResp.setRespObj(customers);
         }catch (Exception e){
-            apiResp = getException.createException(e);
-            /*apiResp.setResponseCode(SystemConstants.DB_ERROR_CODE);
-            apiResp.setDescription(e.toString());
-            LOGGER.warn("error occured: " + e.getMessage());*/
+            apiResp.setResponseCode(SystemConstants.DB_ERROR_CODE);
+            apiResp.setDescription(e.getMessage());
         }
         return apiResp;
     }

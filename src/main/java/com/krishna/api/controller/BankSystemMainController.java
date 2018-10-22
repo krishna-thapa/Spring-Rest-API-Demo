@@ -1,7 +1,8 @@
 package com.krishna.api.controller;
 
+import com.krishna.api.aspects.InspectApi;
 import com.krishna.api.constants.SystemConstants;
-import com.krishna.api.exception.getException;
+import com.krishna.api.modle.ActionType;
 import com.krishna.api.modle.ApiResponse;
 import com.krishna.api.repository.AccountsRepository;
 import com.krishna.api.service.IGetSystemDetails;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @RestController
-@RequestMapping(path = "/orderSystem")
+@RequestMapping(path = "/bankSystem")
 public class BankSystemMainController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BankSystemMainController.class);
@@ -25,9 +26,7 @@ public class BankSystemMainController {
     @Autowired
     AccountsRepository accountsRepository;
 
-    @Autowired
-    getException getException;
-
+    @InspectApi(action = "Getting all the Customers", priority = ActionType.INFO)
     @GetMapping(path = "/getAllCustomers")
     public @ResponseBody ApiResponse getAllCustomers(HttpServletResponse response){
         long callStarted =  System.currentTimeMillis();
@@ -45,29 +44,27 @@ public class BankSystemMainController {
      * Get method using Hibernate and JPA to get all the fields of Account table
      * @return Api Response
      */
+    @InspectApi(action = "Getting all the Accounts", priority = ActionType.INFO)
     @GetMapping(path = "/allAccounts")
     public @ResponseBody ApiResponse getAllAccounts(){
         // This returns a JSON or XML of all the accounts that are in DB
         ApiResponse apiResponse = new ApiResponse();
         try {
+            apiResponse.setResponseCode(SystemConstants.RES_CODE);
             apiResponse.setRespObj(accountsRepository.findAll());
         }catch (Exception e){
-            LOGGER.warn(e.getMessage());
+            apiResponse.setResponseCode(SystemConstants.DB_ERROR_CODE);
+            apiResponse.setDescription(e.getMessage());
         }
         return apiResponse;
     }
 
+    @InspectApi(action = "Getting account as per requested customerID", priority = ActionType.NOTICE)
     @GetMapping(path = "/account/{customerId}")
     public @ResponseBody ApiResponse getCustomerAccount(@PathVariable("customerId") Integer customerId){
         ApiResponse apiResponse = new ApiResponse();
-        try{
             apiResponse.setRespObj(accountsRepository.findByCustomerId(customerId));
             apiResponse.setResponseCode(200);
-        }catch (Exception e){
-            getException.createException(e);
-            //LOGGER.warn(e.getMessage());
-            //handleException(apiResponse,e);
-        }
         return apiResponse;
     }
 
