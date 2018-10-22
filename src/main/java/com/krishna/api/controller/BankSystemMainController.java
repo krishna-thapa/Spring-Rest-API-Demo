@@ -9,6 +9,7 @@ import com.krishna.api.service.IGetSystemDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -63,20 +64,39 @@ public class BankSystemMainController {
     @GetMapping(path = "/account/{customerId}")
     public @ResponseBody ApiResponse getCustomerAccount(@PathVariable("customerId") Integer customerId){
         ApiResponse apiResponse = new ApiResponse();
-            apiResponse.setRespObj(accountsRepository.findByCustomerId(customerId));
+        try{
             apiResponse.setResponseCode(200);
+            apiResponse.setRespObj(accountsRepository.findByCustomerId(customerId));
+        }catch (Exception e){
+            apiResponse.setResponseCode(SystemConstants.DB_ERROR_CODE);
+            apiResponse.setDescription(e.getMessage());
+        }
         return apiResponse;
     }
 
+    @InspectApi(action = "Getting Active Accounts in desc order of Last used", priority = ActionType.NOTICE)
+    @GetMapping(path = "/activeAccounts")
+    public @ResponseBody ApiResponse getActiveAccounts(){
+        ApiResponse apiResponse = new ApiResponse();
+        String status = "Active";
+        try{
+            apiResponse.setResponseCode(200);
+            apiResponse.setRespObj(accountsRepository.findActiveAccounts(status));
+        }catch (Exception e){
+            apiResponse.setResponseCode(SystemConstants.DB_ERROR_CODE);
+            apiResponse.setDescription(e.getMessage());
+        }
+        return apiResponse;
+    }
     /**
      * This method is common method, used to handle Exception
      * @param
      * @param
      *
-     */
+
     private void handleException(ApiResponse apiResponse, Exception e) {
         LOGGER.warn("exception occurred" + e);
         apiResponse.setResponseCode(SystemConstants.DB_ERROR_CODE);
         apiResponse.setDescription(e.getMessage());
-    }
+    }*/
 }
