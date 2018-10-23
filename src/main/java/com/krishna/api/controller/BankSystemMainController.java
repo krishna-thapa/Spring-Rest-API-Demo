@@ -4,12 +4,12 @@ import com.krishna.api.aspects.InspectApi;
 import com.krishna.api.constants.SystemConstants;
 import com.krishna.api.modle.ActionType;
 import com.krishna.api.modle.ApiResponse;
+import com.krishna.api.modle.CustomerDetails;
 import com.krishna.api.repository.AccountsRepository;
-import com.krishna.api.service.IGetSystemDetails;
+import com.krishna.api.service.ICustomerBankSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +22,7 @@ public class BankSystemMainController {
     private static final Logger LOGGER = LoggerFactory.getLogger(BankSystemMainController.class);
 
     @Autowired
-    IGetSystemDetails getSystemDetails;
+    ICustomerBankSystem customerBankSystem;
 
     @Autowired
     AccountsRepository accountsRepository;
@@ -31,9 +31,23 @@ public class BankSystemMainController {
     @GetMapping(path = "/getAllCustomers")
     public @ResponseBody ApiResponse getAllCustomers(HttpServletResponse response){
         long callStarted =  System.currentTimeMillis();
+        ApiResponse apiResponse;
+
+        apiResponse = customerBankSystem.getCustomerDetails();
+        LOGGER.info("Total time to complete getAllCustomers call: " + (System.currentTimeMillis()-callStarted) + " ms.");
+
+        response.addDateHeader("globalTimestamp", System.currentTimeMillis());
+        response.addHeader("UserId","Krishna-Thapa");
+        return apiResponse;
+    }
+
+    @InspectApi(action = "Inserting new record for Customer", priority = ActionType.NOTICE)
+    @PostMapping(path = "/insertCustomer")
+    public @ResponseBody ApiResponse insertCustomer(@RequestBody CustomerDetails customerDetails, HttpServletResponse response){
+        long callStarted =  System.currentTimeMillis();
         ApiResponse apiResponse = new ApiResponse();
 
-        apiResponse = getSystemDetails.getCustomerDetails();
+        apiResponse = customerBankSystem.createCustomer(customerDetails);
         LOGGER.info("Total time to complete getAllCustomers call: " + (System.currentTimeMillis()-callStarted) + " ms.");
 
         response.addDateHeader("globalTimestamp", System.currentTimeMillis());

@@ -1,0 +1,15 @@
+// To create new customerDetails object in JSON format:
+{
+   "customerAddress": "2 Medway Court",
+   "customerCity": "brighton",
+   "customerTypeCode": "B",
+   "customerFedCode": "234-678-234",
+   "customerPostalCode": "BN2 0HA",
+   "customerState": "ES",
+   "incorpDate": "2018-10-23",
+   "businessName": "Krishna Don",
+   "stateId": "90-34-678",
+   "birthDate": "1991-07-08",
+   "firstName":"Krishna",
+   "lastName":"Thapa"
+}
